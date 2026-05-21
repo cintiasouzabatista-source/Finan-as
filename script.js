@@ -688,7 +688,7 @@ function abrirEditarTransacao(id) {
     document.getElementById('edit-metodo').value = transacaoEditando.metodo;
     document.getElementById('edit-conta-fixa').checked = transacaoEditando.contaFixa || false;
 
-    actualizarCategorias();
+    atualizarCategorias();
     atualizarContasModal();
     document.getElementById('edit-categoria').value = transacaoEditando.categoria;
     document.getElementById('edit-banco').value = transacaoEditando.banco;
@@ -696,7 +696,7 @@ function abrirEditarTransacao(id) {
     abrirModal('modal-editar');
 }
 
-function actualizarCategorias() {
+function atualizarCategorias() {
     const tipo = document.getElementById('edit-tipo').value;
     const categorias = tipo === 'entrada'
      ? ['Salário', 'Freelance', 'Rendimentos', 'Outros']
