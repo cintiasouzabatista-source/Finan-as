@@ -339,6 +339,7 @@ function atualizarMes() {
     document.getElementById('mesAtual').textContent = `${meses[mesAtual]} ${anoAtual}`;
 }
 
+// ===== ATUALIZAR INTERFACE =====
 function atualizar() {
     const dadosMes = dados.filter(d => {
         const data = new Date(d.data);
@@ -386,6 +387,7 @@ function toggleVisibility() {
     atualizar();
 }
 
+// ===== TEMA =====
 function toggleTheme() {
     document.body.classList.toggle('light');
     const isLight = document.body.classList.contains('light');
@@ -459,6 +461,7 @@ function filtrarExtrato() {
     document.getElementById('total-extrato').textContent = `Total: R$ ${total.toFixed(2)}`;
 }
 
+// ===== GRÁFICOS =====
 function trocarGrafico(tipo, e) {
     document.querySelectorAll('.grafico-tabs button').forEach(b => b.classList.remove('tab-active'));
     if (e && e.target) {
@@ -685,7 +688,7 @@ function abrirEditarTransacao(id) {
     document.getElementById('edit-metodo').value = transacaoEditando.metodo;
     document.getElementById('edit-conta-fixa').checked = transacaoEditando.contaFixa || false;
 
-    atualizarCategorias();
+    actualizarCategorias();
     atualizarContasModal();
     document.getElementById('edit-categoria').value = transacaoEditando.categoria;
     document.getElementById('edit-banco').value = transacaoEditando.banco;
@@ -841,12 +844,7 @@ function trocarAba(aba, e) {
     if (aba === 'chat') {
         document.getElementById('chat-box').scrollTop = document.getElementById('chat-box').scrollHeight;
     }
-} // <-- Você fechou a função aqui
-
-// ===== PERSISTÊNCIA =====
-...
-
-} // <-- Chave sobrando no final do arquivo!
+}
 
 // ===== PERSISTÊNCIA =====
 function salvar() {
