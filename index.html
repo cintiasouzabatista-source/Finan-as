@@ -242,6 +242,19 @@ if ('serviceWorker' in navigator) {
   });
 }
 </script>
+
+<script>
+window.onerror = function(msg, src, line, col, err) {
+  alert(
+    'ERRO:\n' +
+    msg + '\n' +
+    'Linha: ' + line + '\n' +
+    'Coluna: ' + col
+  );
+};
+</script>
+
+<script src="script.js"></script>
 <script src="script.js"></script>
 </body>
 </html>
