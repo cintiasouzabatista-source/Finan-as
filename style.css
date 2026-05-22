@@ -183,41 +183,46 @@ header {
     justify-content: center;
 }
 
-/* Linha 2: Barra do Mês centralizada e isolada */
+/* Linha 2: Barra do Mês alinhada à esquerda com folga orgânica */
 .user-info-row {
     display: flex;
-    justify-content: center;
+    justify-content: flex-start; /* Força tudo para a esquerda */
     width: 100%;
 }
 
 .header-top .user-info {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    gap: 4px; /* Espaço curto e elegante entre as setas e o texto */
     background: var(--bg3);
-    padding: 4px 6px;
+    padding: 4px 8px;
     border-radius: 10px;
-    width: 100%;
-    max-width: 280px; /* Alarga o seletor para dar um toque mais premium */
+    width: auto; /* Deixa de ocupar 100%, abraçando apenas o conteúdo */
 }
 
 .header-top .user-info button {
-    width: 32px;
-    height: 32px;
+    width: 28px; /* Reduz ligeiramente para ficar mais minimalista e integrado */
+    height: 28px;
     border-radius: 6px;
-    background: transparent; /* Remove o fundo duplo do botão */
+    background: transparent;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
+    color: var(--text2); /* Setas com cor suave para não competir com o texto principal */
+}
+
+.header-top .user-info button:active {
+    background: var(--bg-hover);
 }
 
 .username {
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 700;
     color: var(--text);
     white-space: nowrap;
     text-transform: capitalize;
+    padding: 0 6px; /* Afasta o nome do mês das setas sem esticar o bloco */
 }
 /* Grupo de botões da direita (Tema e Olho) */
 .header-actions-right {
