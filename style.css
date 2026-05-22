@@ -117,7 +117,6 @@ input,select{
 }
 
 /* ===== HEADER & DASHBOARD CARDS ===== */
-/* ===== HEADER & DASHBOARD CARDS ===== */
 header {
     flex-shrink: 0;
     background: linear-gradient(180deg, var(--bg2) 0%, var(--bg) 100%);
@@ -183,37 +182,43 @@ header {
     justify-content: center;
 }
 
-/* Linha 2: Barra do Mês alinhada à esquerda com folga orgânica */
+/* Linha 2: Barra do Mês alinhada à esquerda com alinhamento vertical rígido */
 .user-info-row {
     display: flex;
     justify-content: flex-start; /* Força tudo para a esquerda */
     width: 100%;
+    margin-top: 2px;
 }
 
 .header-top .user-info {
-    display: flex;
+    display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: 4px; /* Espaço curto e elegante entre as setas e o texto */
     background: var(--bg3);
     padding: 4px 8px;
     border-radius: 10px;
-    width: auto; /* Deixa de ocupar 100%, abraçando apenas o conteúdo */
+    width: auto; /* Abraça apenas o conteúdo */
+    height: 34px; /* Fixa a altura para travar o alinhamento */
+    box-sizing: border-box;
 }
 
 .header-top .user-info button {
-    width: 28px; /* Reduz ligeiramente para ficar mais minimalista e integrado */
-    height: 28px;
+    width: 26px !important; /* Limpa qualquer herança e fixa o tamanho do botão */
+    height: 26px !important;
     border-radius: 6px;
-    background: transparent;
-    display: flex;
+    background: transparent !important;
+    display: flex !important;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    color: var(--text2); /* Setas com cor suave para não competir com o texto principal */
+    color: var(--text2);
+    padding: 0 !important;
+    margin: 0 !important;
 }
 
 .header-top .user-info button:active {
-    background: var(--bg-hover);
+    background: var(--bg-hover) !important;
 }
 
 .username {
@@ -222,23 +227,8 @@ header {
     color: var(--text);
     white-space: nowrap;
     text-transform: capitalize;
-    padding: 0 6px; /* Afasta o nome do mês das setas sem esticar o bloco */
-}
-/* Grupo de botões da direita (Tema e Olho) */
-.header-actions-right {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.header-actions-right button {
-    width: 34px;
-    height: 34px;
-    border-radius: 8px;
-    background: var(--bg3);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    padding: 0 6px;
+    line-height: 26px; /* Alinha o texto na mesma linha das setas */
 }
 
 /* GRID 2x2 DOS CARDS PRINCIPAIS */
@@ -296,10 +286,6 @@ header {
     text-overflow: ellipsis;
 }
 
-/* CORES DOS CARDS DE STATUS */
-.status-entrada { color: var(--emerald) !important; }
-.status-saida { color: var(--rose) !important; }
-.status-fatura { color: var(--orange) !important; }
 /* CORES DOS CARDS DE STATUS */
 .status-entrada { color: var(--emerald) !important; }
 .status-saida { color: var(--rose) !important; }
@@ -392,7 +378,6 @@ header {
     border-top:1px solid var(--border);
     position:relative;
     z-index:998;
-    /* Adiciona espaçamento dinâmico para a área de gestos nativa do iPhone/Android */
     padding-bottom:calc(max(10px, env(safe-area-inset-bottom))); 
     box-sizing:content-box;
 }
@@ -422,17 +407,19 @@ header {
 /* ===== MENU MAIS ===== */
 .menu-mais{
     position:fixed;
-    bottom:calc(85px + env(safe-area-inset-bottom)); /* Sobe dinamicamente se houver barra de navegação por gestos */
+    /* Ajustado para 65px para encostar perfeitamente acima da nav-bar do PWA */
+    bottom:calc(65px + env(safe-area-inset-bottom)); 
     left:50%;
     transform:translateX(-50%);
     background:var(--bg2);
     border:1px solid var(--border);
     border-radius:16px;
     padding:12px;
-    box-shadow:0 8px 24px rgba(0,0,0,0.4);
-    z-index:9999;
-    width:90%;
-    max-width:400px;
+    box-shadow:0 8px 32px rgba(0,0,0,0.5);
+    z-index:99999; /* Garante que fique acima de tudo, sem ser bloqueado */
+    width:92%;
+    max-width:380px;
+    box-sizing:border-box;
 }
 
 .menu-mais-content{
@@ -445,13 +432,15 @@ header {
     background:var(--bg3);
     border:none;
     border-radius:12px;
-    padding:16px 8px;
+    padding:14px 8px;
     color:var(--text);
     display:flex;
     flex-direction:column;
     align-items:center;
+    justify-content:center;
     gap:6px;
     cursor:pointer;
+    transition:background 0.2s;
 }
 
 .menu-mais button:active{
@@ -459,12 +448,13 @@ header {
 }
 
 .menu-mais button i{
-    font-size:20px;
+    font-size:18px;
     color:#60a5fa;
 }
 
 .menu-mais button span{
     font-size:11px;
+    font-weight:500;
 }
 
 /* ===== MODAIS DO SISTEMA ===== */
@@ -473,7 +463,7 @@ header {
     inset:0;
     background:rgba(0,0,0,.8);
     backdrop-filter:blur(4px);
-    display:none; /* Controlado via JS */
+    display:none; 
     align-items:center;
     justify-content:center;
     z-index:1100;
@@ -710,7 +700,6 @@ header {
     color: #fff;
 }
 
-/* LISTA EM LINHAS HORIZONTAIS DE ASPECTO PREMIUM */
 .grafico-lista {
     max-height: 240px;
     overflow-y: auto;
