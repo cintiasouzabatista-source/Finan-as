@@ -129,12 +129,15 @@ header {
     gap: 12px;
 }
 
-/* Container do topo em formato de coluna para empilhar as duas linhas */
+/* Força a barra do topo a nunca quebrar os elementos em linhas diferentes */
 .header-top {
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center;
+    justify-content: flex-start;
     width: 100%;
+    gap: 8px; /* Espaço reduzido para caber tudo em telas menores */
+    box-sizing: border-box;
 }
 
 /* Linha 1: Logo e Botões nas extremidades */
@@ -166,22 +169,30 @@ header {
     margin: 0;
 }
 
+/* Garante que o grupo de botões da direita fique alinhado lado a lado */
 .header-actions-right {
-    display: flex;
+    display: flex !important;
+    flex-direction: row !important;
     align-items: center;
-    gap: 8px;
+    gap: 8px; /* Espaço entre a lua e o olho */
+    flex-shrink: 0; /* Impede que o grupo esmague ou suma */
 }
 
+/* Força os botões individuais (lua e olho) a terem tamanho fixo e quadrado */
 .header-actions-right button {
-    width: 34px;
-    height: 34px;
-    border-radius: 8px;
-    background: var(--bg3);
-    display: flex;
+    display: inline-flex !important;
     align-items: center;
     justify-content: center;
+    width: 36px !important;
+    height: 36px !important;
+    min-width: 36px !important;
+    border-radius: 8px;
+    background: var(--bg3);
+    color: var(--text);
+    border: none;
+    cursor: pointer;
+    flex-shrink: 0; /* Impede que eles fiquem ovais ou achados */
 }
-
 /* Linha 2: Barra do Mês alinhada à esquerda com alinhamento vertical rígido */
 .user-info-row {
     display: flex;
