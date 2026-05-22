@@ -21,7 +21,7 @@
 
 <body class="dark">
 
-<div id="tela-pin" class="tela-full">
+<div id="tela-pin" class="tela-full" style="display: none;">
     <div class="pin-box">
         <div class="pin-icon">
             <i class="fas fa-lock"></i>
@@ -36,55 +36,62 @@
                 <input type="password" maxlength="1" class="pin-input" inputmode="numeric">
                 <input type="password" maxlength="1" class="pin-input" inputmode="numeric">
             </div>
+            <div id="pin-erro" class="hidden" style="color: var(--rose); margin-top: 10px; font-size: 14px;"></div>
             <button onclick="verificarPin()" class="btn-primary" style="margin-top: 20px; width: 100%;">Acessar</button>
         </div>
     </div>
 </div>
 
-<div id="app-container" class="hidden">
+<div id="app-content" style="display: none; flex-direction: column; height: 100vh;">
     <header>
         <div class="header-top">
             <div class="user-info">
-                <span class="welcome">Olá,</span>
-                <span class="username" id="header-user">Rafa</span>
+                <button onclick="mudarMes(-1)"><i class="fas fa-chevron-left"></i></button>
+                <span class="username" id="mesAtual">Janeiro 2026</span>
+                <button onclick="mudarMes(1)"><i class="fas fa-chevron-right"></i></button>
             </div>
-            <button onclick="toggleOcultarValores()" id="btn-olho">
-                <i class="fas fa-eye"></i>
-            </button>
+            <div style="display: flex; gap: 10px;">
+                <button onclick="toggleTheme()"><i id="theme-icon" class="fas fa-moon"></i></button>
+                <button onclick="toggleVisibility()"><i id="eye-icon" class="fas fa-eye"></i></button>
+            </div>
         </div>
         
         <div class="balance-grid">
             <div class="balance-card">
-                <span class="card-label">Saldo Geral</span>
-                <h2 id="saldo-geral" class="card-value">R$ 0,00</h2>
+                <p class="card-label">SALDO DO MÊS</p>
+                <h2 id="card-saldo" class="card-value">R$ 0,00</h2>
             </div>
             <div class="balance-card">
-                <span class="card-label">Entradas</span>
-                <h2 id="total-entradas" class="card-value status-entrada">R$ 0,00</h2>
+                <p class="card-label">ENTRADAS</p>
+                <h2 id="card-entradas" class="card-value status-entrada">R$ 0,00</h2>
             </div>
             <div class="balance-card">
-                <span class="card-label">Saídas</span>
-                <h2 id="total-saidas" class="card-value status-saida">R$ 0,00</h2>
+                <p class="card-label">SAÍDAS</p>
+                <h2 id="card-saidas" class="card-value status-saida">R$ 0,00</h2>
             </div>
             <div class="balance-card">
-                <span class="card-label">Fatura Cartão</span>
-                <h2 id="total-faturas" class="card-value status-fatura">R$ 0,00</h2>
+                <p class="card-label">CARTÕES</p>
+                <h2 id="card-cartoes" class="card-value status-fatura">R$ 0,00</h2>
             </div>
+        </div>
+        <div class="balance-card single-card" style="margin: 10px 16px 0 16px;">
+            <p class="card-label">LÍQUIDO</p>
+            <h2 id="card-liquido" class="card-value">R$ 0,00</h2>
         </div>
     </header>
 
-    <main>
+    <main style="flex: 1; overflow-y: auto;">
         <div id="chat-box" class="chat-container">
             </div>
     </main>
 
     <div class="input-bar-container">
         <div class="input-bar">
-            <input type="text" id="input-comando" placeholder="Digite ou fale: 'Almoço 35 no Itaú'...">
+            <input type="text" id="user-input" placeholder="Digite ou fale: 'Almoço 35'...">
             <button id="btn-voz" onclick="iniciarVoz()">
                 <i class="fas fa-microphone"></i>
             </button>
-            <button id="btn-enviar" onclick="processarComando()">
+            <button id="btn-enviar">
                 <i class="fas fa-paper-plane"></i>
             </button>
         </div>
@@ -96,7 +103,7 @@
             <span>Chat</span>
         </button>
 
-        <button class="nav-item" onclick="abrirModal('modal-extrato')">
+        <button class="nav-item" onclick="abrirExtrato()">
             <i class="fas fa-list-ul"></i>
             <span>Extrato</span>
         </button>
@@ -106,7 +113,7 @@
             <span>Gráficos</span>
         </button>
 
-        <button class="nav-item" onclick="toggleMenuMais()">
+        <button class="nav-item" onclick="abrirMenuMais(event)">
             <i class="fas fa-ellipsis-h"></i>
             <span>Mais</span>
         </button>
@@ -115,22 +122,22 @@
 
 <div id="menu-mais" class="menu-mais hidden">
     <div class="menu-mais-content">
-        <button onclick="abrirModalConta(); fecharMenuMais()">
+        <button onclick="abrirModalConta()">
             <i class="fas fa-university"></i>
             <span>Contas</span>
         </button>
 
-        <button onclick="abrirModalCartao(); fecharMenuMais()">
+        <button onclick="abrirModalCartao()">
             <i class="fas fa-credit-card"></i>
             <span>Cartões</span>
         </button>
 
-        <button onclick="toggleProjetado(); fecharMenuMais()">
+        <button onclick="toggleProjetado()">
             <i class="fas fa-chart-line"></i>
             <span>Projeção</span>
         </button>
 
-        <button onclick="resetarTransacoes(); fecharMenuMais()">
+        <button onclick="resetarTransacoes()">
             <i class="fas fa-eraser"></i>
             <span>Limpar Mês</span>
         </button>
@@ -142,7 +149,24 @@
     </div>
 </div>
 
-<div id="modal-extrato" class="modal">
+<div id="modal-onboarding" class="modal" style="display: none;">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Bem-vindo ao BankDay</h3>
+            <p>Escolha o modo de utilização do aplicativo:</p>
+        </div>
+        <div class="modal-body">
+            <button onclick="selecionarModo('producao')" class="btn-onboard" style="background: var(--bg3); padding: 15px; border-radius: 8px; margin-bottom: 10px; text-align: left; width: 100%;">
+                <strong><i class="fas fa-wallet"></i> Modo Produção</strong><br>Comece limpo e configure suas contas.
+            </button>
+            <button onclick="selecionarModo('teste')" class="btn-onboard" style="background: var(--bg3); padding: 15px; border-radius: 8px; text-align: left; width: 100%;">
+                <strong><i class="fas fa-flask"></i> Modo Teste (48h)</strong><br>Explore o app com dados temporários.
+            </button>
+        </div>
+    </div>
+</div>
+
+<div id="modal-extrato" class="modal" style="display: none;">
     <div class="modal-content">
         <div class="modal-head">
             <h3>Extrato</h3>
@@ -167,7 +191,7 @@
     </div>
 </div>
 
-<div id="modal-graficos" class="modal">
+<div id="modal-graficos" class="modal" style="display: none;">
     <div class="modal-content">
         <div class="modal-head">
             <h3>Análise de Gastos</h3>
@@ -178,7 +202,7 @@
                 <p id="grafico-titulo" class="grafico-label">Gastos por Categoria</p>
                 <p id="grafico-total" class="grafico-total">R$ 0,00</p>
             </div>
-            <div class="grafico-tabs">
+            <div class="grafico-tabs" style="display: flex; gap: 5px; margin-bottom: 15px;">
                 <button class="tab-active" onclick="trocarGrafico('categoria', event)">Categorias</button>
                 <button onclick="trocarGrafico('conta', event)">Contas</button>
                 <button onclick="trocarGrafico('cartao', event)">Cartões</button>
@@ -193,112 +217,112 @@
     </div>
 </div>
 
-<div id="modal-contas" class="modal">
+<div id="modal-contas" class="modal" style="display: none;">
     <div class="modal-content">
         <div class="modal-head">
             <h3>Gerenciar Contas</h3>
             <button onclick="fecharModal('modal-contas')"><i class="fas fa-times"></i></button>
         </div>
         <div class="modal-body">
-            <div class="form-group">
-                <label>Nome da Conta</label>
-                <input type="text" id="conta-nome" placeholder="Ex: Nubank, Carteira">
+            <div class="form-group" style="margin-bottom: 10px;">
+                <label style="display:block; margin-bottom:5px;">Nome da Conta</label>
+                <input type="text" id="conta-nome" placeholder="Ex: Nubank, Carteira" style="width:100%; padding:10px; border-radius:5px;">
             </div>
-            <div class="form-group">
-                <label>Saldo Inicial</label>
-                <input type="number" id="conta-saldo" step="0.01" placeholder="0.00">
+            <div class="form-group" style="margin-bottom: 15px;">
+                <label style="display:block; margin-bottom:5px;">Saldo Inicial</label>
+                <input type="number" id="conta-saldo" step="0.01" placeholder="0.00" style="width:100%; padding:10px; border-radius:5px;">
             </div>
-            <button onclick="addTempConta()" class="btn-add">Adicionar Conta</button>
+            <button onclick="addTempConta()" class="btn-add" style="width:100%; padding:10px; margin-bottom:15px; border-radius:5px; background:var(--emerald); color:#fff;">Adicionar Conta</button>
             <hr style="margin: 16px 0; border-color: var(--border);">
             <div id="lista-contas-temp" class="list-temp"></div>
-            <button onclick="salvarContas()" class="btn-save">Salvar e Concluir</button>
+            <button onclick="salvarContas()" class="btn-save" style="width:100%; padding:12px; border-radius:5px; background:var(--blue); color:#fff; font-weight:bold;">Salvar e Concluir</button>
         </div>
     </div>
 </div>
 
-<div id="modal-cartao" class="modal">
+<div id="modal-cartao" class="modal" style="display: none;">
     <div class="modal-content">
         <div class="modal-head">
             <h3>Gerenciar Cartões</h3>
             <button onclick="fecharModal('modal-cartao')"><i class="fas fa-times"></i></button>
         </div>
         <div class="modal-body">
-            <div class="form-group">
-                <label>Nome do Cartão</label>
-                <input type="text" id="cartao-nome" placeholder="Ex: Inter Black">
+            <div class="form-group" style="margin-bottom: 10px;">
+                <label style="display:block; margin-bottom:5px;">Nome do Cartão</label>
+                <input type="text" id="cartao-nome" placeholder="Ex: Inter Black" style="width:100%; padding:10px; border-radius:5px;">
             </div>
-            <div class="form-group">
-                <label>Limite</label>
-                <input type="number" id="cartao-limite" step="0.01" placeholder="0.00">
+            <div class="form-group" style="margin-bottom: 10px;">
+                <label style="display:block; margin-bottom:5px;">Limite</label>
+                <input type="number" id="cartao-limite" step="0.01" placeholder="0.00" style="width:100%; padding:10px; border-radius:5px;">
             </div>
-            <div class="form-group" style="display: flex; gap: 8px;">
+            <div class="form-group" style="display: flex; gap: 8px; margin-bottom: 15px;">
                 <div style="flex: 1;">
-                    <label>Fechamento (Dia)</label>
-                    <input type="number" id="cartao-fechamento" min="1" max="31">
+                    <label style="display:block; margin-bottom:5px;">Fechamento (Dia)</label>
+                    <input type="number" id="cartao-fechamento" min="1" max="31" style="width:100%; padding:10px; border-radius:5px;">
                 </div>
                 <div style="flex: 1;">
-                    <label>Vencimento (Dia)</label>
-                    <input type="number" id="cartao-vencimento" min="1" max="31">
+                    <label style="display:block; margin-bottom:5px;">Vencimento (Dia)</label>
+                    <input type="number" id="cartao-vencimento" min="1" max="31" style="width:100%; padding:10px; border-radius:5px;">
                 </div>
             </div>
-            <button onclick="addTempCartao()" class="btn-add">Adicionar Cartão</button>
+            <button onclick="addTempCartao()" class="btn-add" style="width:100%; padding:10px; margin-bottom:15px; border-radius:5px; background:var(--emerald); color:#fff;">Adicionar Cartão</button>
             <hr style="margin: 16px 0; border-color: var(--border);">
             <div id="lista-cartoes-temp" class="list-temp"></div>
-            <button onclick="salvarCartoes()" class="btn-save">Salvar e Concluir</button>
+            <button onclick="salvarCartoes()" class="btn-save" style="width:100%; padding:12px; border-radius:5px; background:var(--blue); color:#fff; font-weight:bold;">Salvar e Concluir</button>
         </div>
     </div>
 </div>
 
-<div id="modal-editar" class="modal">
+<div id="modal-editar" class="modal" style="display: none;">
     <div class="modal-content">
         <div class="modal-head">
             <h3>Editar Lançamento</h3>
             <button onclick="fecharModal('modal-editar')"><i class="fas fa-times"></i></button>
         </div>
         <div class="modal-body">
-            <div class="form-group">
+            <div class="form-group" style="margin-bottom: 10px;">
                 <label>Descrição</label>
-                <input type="text" id="edit-desc">
+                <input type="text" id="edit-desc" style="width:100%; padding:8px; border-radius:5px;">
             </div>
-            <div class="form-group">
+            <div class="form-group" style="margin-bottom: 10px;">
                 <label>Valor</label>
-                <input type="number" id="edit-valor" step="0.01">
+                <input type="number" id="edit-valor" step="0.01" style="width:100%; padding:8px; border-radius:5px;">
             </div>
-            <div class="form-group">
+            <div class="form-group" style="margin-bottom: 10px;">
                 <label>Data</label>
-                <input type="date" id="edit-data">
+                <input type="date" id="edit-data" style="width:100%; padding:8px; border-radius:5px;">
             </div>
-            <div class="form-group">
+            <div class="form-group" style="margin-bottom: 10px;">
                 <label>Tipo</label>
-                <select id="edit-tipo" onchange="atualizarCategorias()">
+                <select id="edit-tipo" onchange="atualizarCategorias()" style="width:100%; padding:8px; border-radius:5px;">
                     <option value="entrada">Entrada</option>
                     <option value="saida">Saída</option>
                 </select>
             </div>
-            <div class="form-group">
+            <div class="form-group" style="margin-bottom: 10px;">
                 <label>Forma de Pagamento</label>
-                <select id="edit-metodo" onchange="atualizarContasModal()">
+                <select id="edit-metodo" onchange="atualizarContasModal()" style="width:100%; padding:8px; border-radius:5px;">
                     <option value="conta">Conta (Saldo)</option>
                     <option value="cartao">Cartão de Crédito</option>
                 </select>
             </div>
-            <div class="form-group">
+            <div class="form-group" style="margin-bottom: 10px;">
                 <label>Origem / Destino</label>
-                <select id="edit-banco"></select>
+                <select id="edit-banco" style="width:100%; padding:8px; border-radius:5px territory;"></select>
             </div>
-            <div class="form-group">
+            <div class="form-group" style="margin-bottom: 10px;">
                 <label>Categoria</label>
-                <select id="edit-categoria"></select>
+                <select id="edit-categoria" style="width:100%; padding:8px; border-radius:5px;"></select>
             </div>
-            <div class="form-group">
+            <div class="form-group" style="margin-bottom: 15px;">
                 <label class="checkbox-label">
                     <input type="checkbox" id="edit-conta-fixa">
                     <span>Conta Fixa (Repetir todo mês)</span>
                 </label>
             </div>
-            <div class="modal-actions">
-                <button onclick="deletarTransacao()" class="btn-delete"><i class="fas fa-trash"></i> Excluir</button>
-                <button onclick="salvarEdicao()" class="btn-save">Salvar Alterações</button>
+            <div class="modal-actions" style="display:flex; gap:10px;">
+                <button onclick="deletarTransacao()" class="btn-delete" style="flex:1; padding:10px; background:var(--rose); color:#fff; border-radius:5px;"><i class="fas fa-trash"></i> Excluir</button>
+                <button onclick="salvarEdicao()" class="btn-save" style="flex:1; padding:10px; background:var(--blue); color:#fff; border-radius:5px;">Salvar</button>
             </div>
         </div>
     </div>
@@ -307,23 +331,13 @@
 <script>
 window.onerror = function(msg, src, line, col) {
     alert(
-        'ERRO:\\n' +
-        msg + '\\n' +
+        'ERRO INTERNO:\\n' + msg + '\\n' +
         'Linha: ' + line + '\\n' +
         'Coluna: ' + col
     );
 };
 </script>
 
-<script>
-if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js')
-            .then(reg => console.log('SW Registrado com sucesso!', reg.scope))
-            .catch(err => console.log('Falha ao registrar o SW:', err));
-    });
-}
-</script>
 <script src="script.js"></script>
 
 </body>
