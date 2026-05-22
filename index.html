@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-
     <title>BankDay</title>
 
     <meta name="theme-color" content="#0f172a">
@@ -11,15 +10,13 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
     <link rel="manifest" href="./manifest.json">
-    <link rel="stylesheet" href="style.css">
-
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
     <link rel="apple-touch-icon" href="./icon-192x192.png">
     <link rel="icon" href="./favicon.png" type="image/png">
+    <link rel="icon" href="data:,">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body class="dark">
@@ -107,6 +104,34 @@
                 <i class="fas fa-chevron-right"></i>
             </button>
         </div>
+
+        <!-- CARDS -->
+        <div class="cards-grid">
+            <div onclick="abrirExtrato('entrada')" class="card-item">
+                <p>ENTRADAS</p>
+                <p id="card-entradas" class="val text-emerald">R$ 0,00</p>
+            </div>
+
+            <div onclick="abrirExtrato('saida')" class="card-item">
+                <p>SAÍDAS</p>
+                <p id="card-saidas" class="val text-orange">R$ 0,00</p>
+            </div>
+
+            <div onclick="abrirExtrato('saldo')" class="card-item">
+                <p>SALDO</p>
+                <p id="card-saldo" class="val text-blue">R$ 0,00</p>
+            </div>
+
+            <div onclick="abrirExtrato('cartao')" class="card-item">
+                <p>FATURA</p>
+                <p id="card-cartoes" class="val text-rose">R$ 0,00</p>
+            </div>
+
+            <div onclick="abrirExtrato('liquido')" class="card-liquido">
+                <p>LÍQUIDO</p>
+                <p id="card-liquido" class="val big">R$ 0,00</p>
+            </div>
+        </div>
     </header>
 
     <main id="chat-box"></main>
@@ -127,30 +152,29 @@
         </button>
     </footer>
 
+    <!-- MENU INFERIOR -->
     <nav class="nav">
-        <button class="nav-item active"
-                onclick="trocarAba('chat', event)">
+
+        <button class="nav-item active" onclick="trocarAba('chat', event)">
             <i class="fas fa-comment-dots"></i>
             <span>Chat</span>
         </button>
 
-        <button class="nav-item"
-                onclick="abrirExtrato()">
+        <button class="nav-item" onclick="abrirExtrato()">
             <i class="fas fa-list"></i>
             <span>Extrato</span>
         </button>
 
-        <button class="nav-item"
-                onclick="abrirGraficos(); trocarGrafico('categoria', event)">
+        <button class="nav-item" onclick="abrirGraficos(); trocarGrafico('categoria', event)">
             <i class="fas fa-chart-bar"></i>
             <span>Gráficos</span>
         </button>
 
-        <button class="nav-item"
-                onclick="abrirMenuMais(event)">
+        <button class="nav-item" onclick="abrirMenuMais(event)">
             <i class="fas fa-ellipsis-h"></i>
             <span>Mais</span>
         </button>
+
     </nav>
 </div>
 
@@ -182,23 +206,13 @@
             <i class="fas fa-trash"></i>
             <span>Resetar App</span>
         </button>
+
     </div>
 </div>
 
-<!-- seus modais continuam aqui sem alteração -->
-
+<!-- ERROS -->
 <script>
-if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js')
-            .then(reg => console.log('SW registrado:', reg))
-            .catch(err => console.error('SW erro:', err));
-    });
-}
-</script>
-
-<script>
-window.onerror = function(msg, src, line, col, err) {
+window.onerror = function(msg, src, line, col) {
     alert(
         'ERRO:\n' +
         msg + '\n' +
@@ -208,7 +222,18 @@ window.onerror = function(msg, src, line, col, err) {
 };
 </script>
 
-<script src="./script.js"></script>
+<!-- SERVICE WORKER -->
+<script>
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js')
+            .then(reg => console.log('SW registrado:', reg))
+            .catch(err => console.log('SW erro:', err));
+    });
+}
+</script>
+
+<script src="script.js"></script>
 
 </body>
 </html>
