@@ -120,71 +120,65 @@ input,select{
 header {
     flex-shrink: 0;
     background: linear-gradient(180deg, var(--bg2) 0%, var(--bg) 100%);
-    padding: 14px 16px 14px 16px;
+    padding: 14px 16px;
     border-bottom: 1px solid var(--border);
     position: relative;
     z-index: 40;
     display: flex;
     flex-direction: column;
-    gap: 12px; /* Espaço rígido entre a barra do topo, a grid e o card líquido */
+    gap: 12px; /* Mantém espaço fixo e seguro entre o topo, a grid e o líquido */
 }
 
-/* 3 Colunas Perfeitas sem invasão de espaço */
+/* Alinhamento perfeito em linha do topo */
 .header-top {
-    display: grid;
-    grid-template-columns: minmax(70px, 1fr) auto minmax(70px, 1fr);
+    display: flex;
+    justify-content: space-between;
     align-items: center;
     width: 100%;
 }
 
-.header-logo {
-    display: flex;
-    justify-content: flex-start;
-}
-
-.header-logo h1 {
-    font-size: 19px;
-    font-weight: 800;
-    background: linear-gradient(45deg, var(--blue), #60a5fa);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    letter-spacing: -0.02em;
-}
-
+/* Garante que os botões e o mês fiquem perfeitamente alinhados no centro */
 .header-top .user-info {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
+    gap: 12px;
 }
 
 .header-top button {
-    width: 32px;
-    height: 32px;
+    width: 34px;
+    height: 34px;
     border-radius: 8px;
     background: var(--bg3);
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
+    transition: background 0.2s;
+}
+
+.header-top button:active {
+    background: var(--bg-hover);
 }
 
 .username {
-    font-size: 15px;
+    font-size: 16px;
     font-weight: 700;
     color: var(--text);
     white-space: nowrap;
+    line-height: 34px; /* Casamento perfeito com a altura dos botões */
 }
 
+/* Grupo de botões da direita (Tema e Olho) */
 .header-actions-right {
     display: flex;
-    justify-content: flex-end;
+    align-items: center;
     gap: 8px;
 }
 
 .header-actions-right button {
-    width: 32px;
-    height: 32px;
+    width: 34px;
+    height: 34px;
     border-radius: 8px;
     background: var(--bg3);
     display: flex;
@@ -192,7 +186,7 @@ header {
     justify-content: center;
 }
 
-/* GRID 2x2 DOS CARDS */
+/* GRID 2x2 DOS CARDS PRINCIPAIS */
 .balance-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -220,7 +214,7 @@ header {
     border: 1px solid var(--border);
     border-radius: 12px;
     padding: 12px 14px;
-    width: 100%; /* Ocupa a largura total correta do header */
+    width: 100%;
     display: flex;
     flex-direction: column;
     box-sizing: border-box;
@@ -233,7 +227,7 @@ header {
     font-weight: 600;
     color: var(--text2);
     letter-spacing: 0.05em;
-    margin-bottom: 6px;
+    margin-bottom: 4px;
     text-transform: uppercase;
 }
 
@@ -247,6 +241,10 @@ header {
     text-overflow: ellipsis;
 }
 
+/* CORES DOS CARDS DE STATUS */
+.status-entrada { color: var(--emerald) !important; }
+.status-saida { color: var(--rose) !important; }
+.status-fatura { color: var(--orange) !important; }
 /* CORES DOS CARDS DE STATUS */
 .status-entrada { color: var(--emerald) !important; }
 .status-saida { color: var(--rose) !important; }
