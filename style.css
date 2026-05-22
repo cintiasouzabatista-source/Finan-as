@@ -405,21 +405,29 @@ header {
 }
 
 /* ===== MENU MAIS ===== */
-.menu-mais{
-    position:fixed;
-    /* Ajustado para 65px para encostar perfeitamente acima da nav-bar do PWA */
-    bottom:calc(65px + env(safe-area-inset-bottom)); 
-    left:50%;
-    transform:translateX(-50%);
-    background:var(--bg2);
-    border:1px solid var(--border);
-    border-radius:16px;
-    padding:12px;
-    box-shadow:0 8px 32px rgba(0,0,0,0.5);
-    z-index:99999; /* Garante que fique acima de tudo, sem ser bloqueado */
-    width:92%;
-    max-width:380px;
-    box-sizing:border-box;
+.menu-mais {
+    position: fixed;
+    /* Encosta perfeitamente acima da nav-bar do PWA */
+    bottom: calc(65px + env(safe-area-inset-bottom)); 
+    
+    /* REMOVIDO o posicionamento centralizado anterior */
+    /* left: 50%; */
+    /* transform: translateX(-50%); */
+
+    /* NOVO: Fixa o menu do lado direito com um recuo elegante da borda */
+    right: 16px; 
+    
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 12px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+    z-index: 99999;
+    
+    /* Ajusta a largura para não estourar no mobile e ficar compacto */
+    width: calc(100% - 32px);
+    max-width: 320px; /* Reduzido de 380px para ficar mais harmônico no canto */
+    box-sizing: border-box;
 }
 
 .menu-mais-content{
