@@ -43,56 +43,53 @@
 </div>
 
 <div id="app-content" style="display: none; flex-direction: column; height: 100vh;">
-    <header>
-      <div class="header-top">
-            <div class="header-main-row">
-                <div class="header-logo">
-                    <i class="fas fa-university"></i>
-                    <h1>BankDay</h1>
-                </div>
-                <div class="header-actions-right">
-                    <button onclick="toggleTheme()"><i id="theme-icon" class="fas fa-moon"></i></button>
-                    <button onclick="toggleVisibility()"><i id="eye-icon" class="fas fa-eye"></i></button>
-                </div>
+   
+<header>
+    <div class="header-top">
+        <div class="header-main-row">
+            <div class="header-logo">
+                <i class="fas fa-university"></i>
+                <h1>BankDay</h1>
             </div>
-
-            <div class="user-info-row">
-                <div class="user-info">
-                    <button onclick="mudarMes(-1)"><i class="fas fa-chevron-left"></i></button>
-                    <span class="username" id="mesAtual">Janeiro 2026</span>
-                    <button onclick="mudarMes(1)"><i class="fas fa-chevron-right"></i></button>
-                </div>
-            </div>
-        </div>
-            <div style="display: flex; gap: 10px;">
+            <div class="header-actions-right">
                 <button onclick="toggleTheme()"><i id="theme-icon" class="fas fa-moon"></i></button>
                 <button onclick="toggleVisibility()"><i id="eye-icon" class="fas fa-eye"></i></button>
             </div>
         </div>
+
+        <div class="user-info-row">
+            <div class="user-info">
+                <button onclick="mudarMes(-1)"><i class="fas fa-chevron-left"></i></button>
+                <span class="username" id="mesAtual">Janeiro 2026</span>
+                <button onclick="mudarMes(1)"><i class="fas fa-chevron-right"></i></button>
+            </div>
+        </div>
+    </div>
         
-        <div class="balance-grid">
-            <div class="balance-card">
-                <p class="card-label">SALDO DO MÊS</p>
-                <h2 id="card-saldo" class="card-value">R$ 0,00</h2>
-            </div>
-            <div class="balance-card">
-                <p class="card-label">ENTRADAS</p>
-                <h2 id="card-entradas" class="card-value status-entrada">R$ 0,00</h2>
-            </div>
-            <div class="balance-card">
-                <p class="card-label">SAÍDAS</p>
-                <h2 id="card-saidas" class="card-value status-saida">R$ 0,00</h2>
-            </div>
-            <div class="balance-card">
-                <p class="card-label">CARTÕES</p>
-                <h2 id="card-cartoes" class="card-value status-fatura">R$ 0,00</h2>
-            </div>
+    <div class="balance-grid">
+        <div class="balance-card">
+            <p class="card-label">SALDO DO MÊS</p>
+            <h2 id="card-saldo" class="card-value">R$ 0,00</h2>
         </div>
-        <div class="balance-card single-card" style="margin: 10px 16px 0 16px;">
-            <p class="card-label">LÍQUIDO</p>
-            <h2 id="card-liquido" class="card-value">R$ 0,00</h2>
+        <div class="balance-card">
+            <p class="card-label">ENTRADAS</p>
+            <h2 id="card-entradas" class="card-value status-entrada">R$ 0,00</h2>
         </div>
-    </header>
+        <div class="balance-card">
+            <p class="card-label">SAÍDAS</p>
+            <h2 id="card-saidas" class="card-value status-saida">R$ 0,00</h2>
+        </div>
+        <div class="balance-card">
+            <p class="card-label">CARTÕES</p>
+            <h2 id="card-cartoes" class="card-value status-fatura">R$ 0,00</h2>
+        </div>
+    </div>
+
+    <div class="single-card">
+        <p class="card-label">LÍQUIDO</p>
+        <h2 id="card-liquido" class="card-value">R$ 0,00</h2>
+    </div>
+</header>
 
     <main style="flex: 1; overflow-y: auto;">
         <div id="chat-box" class="chat-container">
