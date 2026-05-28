@@ -696,29 +696,20 @@ header {
 .grafico-tabs {
     display: flex;
     gap: 8px;
-    margin-bottom: 20px;
     overflow-x: auto;
-    border-bottom: 1px solid var(--border);
-    padding-bottom: 4px;
+    white-space: nowrap;
+    scrollbar-width: none;
+    padding-bottom: 6px;
+}
+
+.grafico-tabs::-webkit-scrollbar {
+    display: none;
 }
 
 .grafico-tabs button {
-    padding: 8px 16px;
-    border: none;
-    background: var(--bg-hover);
-    color: var(--text-muted);
-    border-radius: 8px;
-    font-size: 13px;
-    font-weight: 500;
-    white-space: nowrap;
-    transition: all 0.2s ease;
+    flex: 0 0 auto;
+    min-width: 120px;
 }
-
-.grafico-tabs button.tab-active {
-    background: var(--blue);
-    color: #fff;
-}
-
 .grafico-lista {
     max-height: 240px;
     overflow-y: auto;
