@@ -340,6 +340,8 @@ function atualizarMes() {
 }
 
 // ===== ATUALIZAR INTERFACE =====
+
+
 function atualizar() {
     const dadosMes = dados.filter(d => {
         const data = new Date(d.data);
@@ -351,7 +353,7 @@ function atualizar() {
     const cartao = dadosMes.filter(d => d.metodo === 'cartao' && d.tipo === 'saida').reduce((s, d) => s + d.valor, 0);
     const saldo = entradas - saidas;
     const saldoContas = contas.reduce((s, c) => s + c.saldo, 0);
-    let liquido = saldoContas + saldo;
+    let liquido = calcularSaldoAcumulado();
 
     const cardLiquidoLabel = document.querySelector('#card-liquido')?.parentElement.querySelector('p');
 
@@ -380,6 +382,58 @@ function atualizar() {
     if(document.getElementById('card-cartoes')) document.getElementById('card-cartoes').textContent = fmt(cartao);
     if(document.getElementById('card-liquido')) document.getElementById('card-liquido').textContent = fmt(liquido);
 }
+
+// ===== ATUALIZAR INTERFACE =====
+
+// ADICIONE ESTA FUNÇÃO AQUI
+function calcularSaldoAcumulado() {
+    let acumulado = contas.reduce((s, c) => s + c.saldo, 0);
+
+    dados.forEach(d => {
+        const data = new Date(d.data);
+
+        const antesOuAtual =
+            data.getFullYear() < anoAtual ||
+            (data.getFullYear() === anoAtual &&
+             data.getMonth() <= mesAtual);
+
+        if (antesOuAtual) {
+            acumulado += d.tipo === 'entrada'
+                ? d.valor
+                : -d.valor;
+        }
+    });
+
+    return acumulado;
+}
+
+// SUA FUNÇÃO EXISTENTE
+function atualizar() {
+    const dadosMes = dados.filter(d => {
+        const data = new Date(d.data);
+        return data.getMonth() === mesAtual &&
+               data.getFullYear() === anoAtual;
+    });
+
+    const entradas = dadosMes
+        .filter(d => d.tipo === 'entrada')
+        .reduce((s, d) => s + d.valor, 0);
+
+    const saidas = dadosMes
+        .filter(d => d.tipo === 'saida')
+        .reduce((s, d) => s + d.valor, 0);
+
+    const cartao = dadosMes
+        .filter(d => d.metodo === 'cartao' && d.tipo === 'saida')
+        .reduce((s, d) => s + d.valor, 0);
+
+    const saldo = entradas - saidas;
+
+    // TROQUE ESTA LINHA:
+    // let liquido = saldoContas + saldo;
+
+    // POR ESTA:
+    let liquido = calcularSaldoAcumulado();
 
 function toggleVisibility() {
     ocultarValores = !ocultarValores;
@@ -543,82 +597,85 @@ function trocarGrafico(tipo, e) {
     if (chartInstance) chartInstance.destroy();
     const ctx = document.getElementById('grafico').getContext('2d');
 
-    chartInstance = new Chart(ctx, {
-        type: tipo === 'evolucao'? 'line' : 'bar',
-        data: {
-            labels: labels,
-            datasets: [{
-                label: 'Valor',
-                data: valores,
-                backgroundColor: backgroundColor,
-                borderColor: borderColor,
-                borderWidth: tipo === 'evolucao'? 3 : 0,
-                borderRadius: tipo === 'evolucao'? 0 : 8,
-                fill: tipo === 'evolucao',
-                tension: 0.4,
-                pointRadius: tipo === 'evolucao'? 5 : 0,
-                pointBackgroundColor: '#2563eb',
-                pointBorderColor: '#fff',
-                pointBorderWidth: 2,
-                pointHoverRadius: 7
-            }]
-        },
+  chartInstance = new Chart(ctx, {
+    type: tipo === 'evolucao' ? 'line' : 'bar',
+
+    data: {
+        labels: labels,
+        datasets: [{
+            label: 'Valor',
+            data: valores,
+            backgroundColor: backgroundColor,
+            borderColor: borderColor,
+            borderWidth: tipo === 'evolucao' ? 3 : 0,
+            borderRadius: tipo === 'evolucao' ? 0 : 8,
+            fill: tipo === 'evolucao',
+            tension: 0.4,
+            pointRadius: tipo === 'evolucao' ? 5 : 0,
+            pointBackgroundColor: '#2563eb',
+            pointBorderColor: '#fff',
+            pointBorderWidth: 2,
+            pointHoverRadius: 7
+        }]
+    },
+
     options: {
-    responsive: true,
-    maintainAspectRatio: false,
-    indexAxis: 'y', // gráfico deitado
+        responsive: true,
+        maintainAspectRatio: false,
 
-    plugins: {
-        legend: { display: false },
-        tooltip: {
-            backgroundColor: '#1f2937',
-            titleColor: '#fff',
-            bodyColor: '#fff',
-            padding: 12,
-            cornerRadius: 8,
-            displayColors: true,
-            callbacks: {
-                label: (ctx) => {
+        plugins: {
+            legend: { display: false },
 
-                    // horizontal usa x
-                    const valor =
-                        tipo === 'evolucao'
-                            ? ctx.parsed.x || ctx.parsed
-                            : ctx.parsed.x || ctx.parsed;
+            tooltip: {
+                backgroundColor: '#1f2937',
+                titleColor: '#fff',
+                bodyColor: '#fff',
+                padding: 12,
+                cornerRadius: 8,
+                displayColors: true,
 
-                    const perc = total
-                        ? ((valor / total) * 100).toFixed(1)
-                        : 0;
+                callbacks: {
+                    label: (ctx) => {
+                        const valor =
+                            tipo === 'evolucao'
+                                ? ctx.parsed.y || ctx.parsed
+                                : ctx.parsed.y || ctx.parsed;
 
-                    return tipo === 'evolucao'
-                        ? `R$ ${valor.toFixed(2)}`
-                        : `R$ ${valor.toFixed(2)} • ${perc}%`;
+                        const perc = total
+                            ? ((valor / total) * 100).toFixed(1)
+                            : 0;
+
+                        return tipo === 'evolucao'
+                            ? `R$ ${valor.toFixed(2)}`
+                            : `R$ ${valor.toFixed(2)} • ${perc}%`;
+                    }
+                }
+            }
+        },
+
+        scales: {
+            x: {
+                grid: {
+                    display: false
+                },
+                ticks: {
+                    color: '#6b7280'
+                }
+            },
+
+            y: {
+                beginAtZero: true,
+                grid: {
+                    color: 'rgba(107, 114, 128, 0.1)'
+                },
+                ticks: {
+                    color: '#6b7280',
+                    callback: (val) => 'R$ ' + val
                 }
             }
         }
-    },
-
-    scales: {
-        x: {
-            beginAtZero: true,
-            grid: {
-                color: 'rgba(107, 114, 128, 0.1)'
-            },
-            ticks: {
-                color: '#6b7280',
-                callback: (val) => 'R$ ' + val
-            }
-        },
-
-        y: {
-            grid: { display: false },
-            ticks: {
-                color: '#6b7280'
-            }
-        }
     }
-}
-
+});
     if (tipo !== 'evolucao') {
         const listaHtml = labels.map((l, i) => {
             const perc = total? ((valores[i]/total)*100).toFixed(1) : 0;
