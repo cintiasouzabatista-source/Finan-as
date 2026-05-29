@@ -563,33 +563,61 @@ function trocarGrafico(tipo, e) {
                 pointHoverRadius: 7
             }]
         },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: { display: false },
-                tooltip: {
-                    backgroundColor: '#1f2937',
-                    titleColor: '#fff',
-                    bodyColor: '#fff',
-                    padding: 12,
-                    cornerRadius: 8,
-                    displayColors: true,
-                    callbacks: {
-                        label: (ctx) => {
-                            const valor = ctx.parsed.y || ctx.parsed;
-                            const perc = total? ((valor/total)*100).toFixed(1) : 0;
-                            return tipo === 'evolucao'? `R$ ${valor.toFixed(2)}` : `R$ ${valor.toFixed(2)} • ${perc}%`;
-                        }
-                    }
+    options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    indexAxis: 'y', // gráfico deitado
+
+    plugins: {
+        legend: { display: false },
+        tooltip: {
+            backgroundColor: '#1f2937',
+            titleColor: '#fff',
+            bodyColor: '#fff',
+            padding: 12,
+            cornerRadius: 8,
+            displayColors: true,
+            callbacks: {
+                label: (ctx) => {
+
+                    // horizontal usa x
+                    const valor =
+                        tipo === 'evolucao'
+                            ? ctx.parsed.x || ctx.parsed
+                            : ctx.parsed.x || ctx.parsed;
+
+                    const perc = total
+                        ? ((valor / total) * 100).toFixed(1)
+                        : 0;
+
+                    return tipo === 'evolucao'
+                        ? `R$ ${valor.toFixed(2)}`
+                        : `R$ ${valor.toFixed(2)} • ${perc}%`;
                 }
-            },
-            scales: {
-                x: { grid: { display: false }, ticks: { color: '#6b7280' } },
-                y: { grid: { color: 'rgba(107, 114, 128, 0.1)' }, ticks: { color: '#6b7280', callback: (val) => 'R$ ' + val } }
             }
         }
-    });
+    },
+
+    scales: {
+        x: {
+            beginAtZero: true,
+            grid: {
+                color: 'rgba(107, 114, 128, 0.1)'
+            },
+            ticks: {
+                color: '#6b7280',
+                callback: (val) => 'R$ ' + val
+            }
+        },
+
+        y: {
+            grid: { display: false },
+            ticks: {
+                color: '#6b7280'
+            }
+        }
+    }
+}
 
     if (tipo !== 'evolucao') {
         const listaHtml = labels.map((l, i) => {
