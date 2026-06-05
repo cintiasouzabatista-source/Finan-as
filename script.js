@@ -786,7 +786,21 @@ function deletarTransacao() {
         transacaoEditando = null;
     }
 }
+function editarConta(id) {
+    const conta = contas.find(c => c.id === id);
+    if (!conta) return;
 
+    const novoNome = prompt('Nome da conta:', conta.nome);
+    if (novoNome === null) return;
+
+    const novoSaldo = prompt('Saldo:', conta.saldo);
+
+    conta.nome = novoNome;
+    conta.saldo = parseFloat(novoSaldo) || 0;
+
+    salvar();
+    atualizar();
+}
 // ===== MENU MAIS =====
 function abrirMenuMais(e) {
     e.stopPropagation();
