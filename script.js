@@ -338,7 +338,24 @@ function atualizarMes() {
     const meses = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
     document.getElementById('mesAtual').textContent = `${meses[mesAtual]} ${anoAtual}`;
 }
+function calcularSaldoAcumulado() {
+    let saldo = contas.reduce((total, conta) => total + (conta.saldo || 0), 0);
 
+    dados.forEach(item => {
+        const data = new Date(item.data);
+
+        if (
+            data.getFullYear() < anoAtual ||
+            (data.getFullYear() === anoAtual && data.getMonth() <= mesAtual)
+        ) {
+            saldo += item.tipo === 'entrada'
+                ? item.valor
+                : -item.valor;
+        }
+    });
+
+    return saldo;
+}
 // ===== ATUALIZAR INTERFACE =====
 
 
