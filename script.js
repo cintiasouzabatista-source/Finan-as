@@ -431,6 +431,60 @@ function abrirModalCartao() {
     renderTempCartoes();
 }
 
+function abrirGerenciarContas() {
+    let html = '';
+
+    contas.forEach(conta => {
+        html += `
+            <div class="item-gerenciar">
+                <span>${conta.nome} - R$ ${conta.saldo.toFixed(2)}</span>
+
+                <button onclick="editarConta(${conta.id})">
+                    Editar
+                </button>
+
+                <button onclick="excluirConta(${conta.id})">
+                    Excluir
+                </button>
+            </div>
+        `;
+    });
+
+    document.getElementById('lista-gerenciar-contas').innerHTML = html;
+    abrirModal('modal-gerenciar-contas');
+}
+
+function editarConta(id) {
+    const conta = contas.find(c => c.id === id);
+
+    if (!conta) return;
+
+    const novoNome = prompt('Nome da conta:', conta.nome);
+    if (novoNome === null) return;
+
+    const novoSaldo = prompt('Saldo da conta:', conta.saldo);
+
+    conta.nome = novoNome;
+    conta.saldo = parseFloat(novoSaldo) || 0;
+
+    salvar();
+    atualizar();
+    abrirGerenciarContas();
+}
+
+function excluirConta(id) {
+    if (!confirm('Excluir esta conta?')) return;
+
+    contas = contas.filter(c => c.id !== id);
+
+    salvar();
+    atualizar();
+    abrirGerenciarContas();
+}
+
+
+
+
 // ===== EXTRATO =====
 function filtrarExtrato() {
     const tipo = document.getElementById('filtro-tipo').value;
